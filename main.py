@@ -1,4 +1,8 @@
 from streamCharacter import StreamCharacter
+import os
+
+
+
 text = ["Ceci est","un test","pour le cours","d'INFO-H417"]
 
 if __name__ == "__main__":
@@ -12,6 +16,9 @@ if __name__ == "__main__":
     readStream.close()
 
     #Writing
+
+    if os.path.exists("scratch.txt"):
+        os.remove("scratch.txt")
     writeFilename = "scratch.txt"
     writeStream = StreamCharacter(writeFilename)
     writeStream.create()
