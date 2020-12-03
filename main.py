@@ -20,10 +20,8 @@ def randomjump(f,j):
     length = len(stream.file.read())
     for i in range(j):
         p = random.randint(0, length)
-        print("Tour",i,"le nombre est",p)
         stream.seek(p)
         line =stream.readln()
-        print(line)
         sum += len(line)
     print(sum)
     return(sum)
