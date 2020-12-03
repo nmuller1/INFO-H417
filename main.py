@@ -19,7 +19,7 @@ if __name__ == "__main__":
     if os.path.exists("scratch.txt"):
         os.remove("scratch.txt")
     writeFilename = "scratch.txt"
-    writeStream = StreamCharacter(writeFilename)
+    writeStream = StreamBuffer(writeFilename,3)
     writeStream.create()
     for line in text:
         writeStream.writeln(line)

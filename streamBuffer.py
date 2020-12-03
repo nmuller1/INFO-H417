@@ -38,8 +38,16 @@ class StreamBuffer(Stream):
         Write a string to the stream and terminate this stream with the newline character
         @param string: to write in the stream
         """
-        for char in string:
-            self.file.write(char)
+        i = 0
+        while i < len(string):
+            while not self.bufferIsFull():
+                self.buffer.append(string[i])
+                i += 1
+                if i == len(string):
+                    break
+            for j in self.buffer:
+                self.file.write(j)
+            self.cleanBuffer()
         self.file.write("\n")
 
     def bufferIsFull(self):
