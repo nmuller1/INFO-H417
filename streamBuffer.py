@@ -51,10 +51,21 @@ class StreamBuffer(Stream):
         self.file.write("\n")
 
     def bufferIsFull(self):
+        """
+        Checks if the buffer is full
+        @return: True if the buffer is full and False if not
+        """
         return len(self.buffer) == self.bufferSize
 
     def bufferIsEmpty(self):
+        """
+        Checks if the buffer is empty
+        @return: True is the buffer is empty and False if not
+        """
         return len(self.buffer) == 0
 
     def cleanBuffer(self):
+        """
+        Empty the buffer
+        """
         self.buffer = []

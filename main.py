@@ -3,6 +3,10 @@ from streamBuffer import StreamBuffer
 
 import os
 
+def testStream(stream):
+
+
+
 text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
 if __name__ == "__main__":
