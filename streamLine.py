@@ -1,11 +1,25 @@
-class streamLine():
-	""" mplement readln and writeln by using the fgets and fputs functions from the C stdio library. These functions implements a buffering mechanism. """
+class StreamLine:
+    """ Implement readln and writeln by using the fgets and fputs functions from the C stdio library. These functions implements a buffering mechanism. """
     def __init__(self):
-    	#comment here
-    	pass
+        pass
 
-    def method(self):
-    	#comment here
-    	pass
+    def open(self):
+        pass
 
-if __name__ == "__main__" :
+    def readIn(self):
+        pass
+
+    def seek(self, pos):
+        pass
+
+    def end_of_stream(self):
+        pass
+
+    def create(self):
+        pass
+
+    def writeIn(self):
+        pass
+
+    def close(self):
+        pass
