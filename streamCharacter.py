@@ -19,6 +19,7 @@ class StreamCharacter(Stream):
     def readln(self):
         """
         Read the next line from the stream
+        @return: read line
         """
         char = " "
         line = ""
@@ -28,7 +29,7 @@ class StreamCharacter(Stream):
                 self.eof = True
                 break
             line += char
-        print(line, end="")
+        return line
 
     def writeln(self, string):
         """

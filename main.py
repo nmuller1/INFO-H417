@@ -3,6 +3,7 @@ from streamBuffer import StreamBuffer
 from streamLine import StreamLine
 from streamMapping import StreamMapping
 import os
+import random
 
 def length(filename):
     """
@@ -13,13 +14,19 @@ def length(filename):
     pass
 
 def randomjump(f,j):
-    stream = StreamBuffer(readFilename, 3)
+    stream = StreamBuffer(f, 3)
     stream.open()
-    stream.seek(0)
-    while not stream.end_of_stream():
-        stream.readln()
-    stream.close()
-
+    sum = 0
+    length = len(stream.file.read())
+    for i in range(j):
+        p = random.randint(0, length)
+        print("Tour",i,"le nombre est",p)
+        stream.seek(p)
+        line =stream.readln()
+        print(line)
+        sum += len(line)
+    print(sum)
+    return(sum)
 
 def testReadStream(stream):
     stream.open()
@@ -38,7 +45,7 @@ def testWriteStream(stream):
 if __name__ == "__main__":
     readFilename = "test.txt"
     readStream = StreamBuffer(readFilename, 1)
-    testReadStream(readStream)
+    #testReadStream(readStream)
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
@@ -46,4 +53,6 @@ if __name__ == "__main__":
         os.remove("scratch.txt")
     writeFilename = "scratch.txt"
     writeStream = StreamBuffer(writeFilename,3)
-    testWriteStream(writeStream)
+    #testWriteStream(writeStream)
+
+    randomjump(readFilename, 3)

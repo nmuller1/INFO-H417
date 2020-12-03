@@ -15,23 +15,26 @@ class StreamBuffer(Stream):
     def readln(self):
         """
         Read the next line from the stream
+        @return: read line
         """
         char = " "
+        line = ""
         while char and char != "\n":
             while not self.bufferIsFull():
                 char = self.file.read(1)
                 if not char:
                     self.eof = True
                     break
-                self.buffer.append(char)
                 if char == "\n":
                     break
+                self.buffer.append(char)
             for i in self.buffer:
-                print(i, end="")
+                line += i
             self.cleanBuffer()
         for i in self.buffer:
-            print(i)
+            line += i
         self.cleanBuffer()
+        return line
 
     def writeln(self, string):
         """
