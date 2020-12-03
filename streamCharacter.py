@@ -10,17 +10,25 @@ class StreamCharacter(Stream):
     def __init__(self, filename):
         Stream.__init__(self, filename)
 
+    def open(self):
+        """
+        Open an existing file for reading
+        """
+        self.file = open(self.filename, "r")
+
     def readln(self):
         """
         Read the next line from the stream
         """
         char = " "
+        line = ""
         while char != "\n":
             char = self.file.read(1)
-            print(char, end="")
+            line += char
             if not char:
                 self.eof = True
                 break
+        print(line, end="")
 
     def writeln(self, string):
         """
