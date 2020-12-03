@@ -24,10 +24,10 @@ class StreamCharacter(Stream):
         line = ""
         while char != "\n":
             char = self.file.read(1)
-            line += char
             if not char:
                 self.eof = True
                 break
+            line += char
         print(line, end="")
 
     def writeln(self, string):
