@@ -15,7 +15,6 @@ class StreamMapping(Stream):
         Read the next line from the stream
         """
         self.map = mmap.mmap(self.file.fileno(), 0)
-        pass
 
     def writeln(self, string):
         """
