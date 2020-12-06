@@ -10,27 +10,26 @@ class StreamMapping(Stream):
     def __init__(self, filename, mmapSize):
         Stream.__init__(self, filename)
         self.mmapSize = mmapSize
+        self.open()
+        self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, access=mmap.ACCESS_READ)
         
 
     def readln(self):
         """
         Read the next line from the stream
         """
-        char = " "
+        char = " ".encode("utf-8")
         line = ""
-        self.map = mmap.mmap(self.file.fileno(), self.mmapSize)
-        while char and char != "\n":
+        while char and char.decode("utf-8") != "\n":
             while not self.mapIsFull():
-                line += self.map.read(1)
+                char = self.map.read(1)
                 if not char:
                     self.eof = True
                     break
-                if char == "\n":
+                if char.decode("utf-8") == "\n":
                     break
-            self.cleanMap()
-            self.map = mmap.mmap(self.file.fileno(), self.mmapSize)
-        self.cleanMap()
-        self.map.close()
+                line += str(char.decode("utf-8"))
+            #self.mapNextPortion()
         return line
 
     def writeln(self, string):
@@ -40,26 +39,32 @@ class StreamMapping(Stream):
         """
     
         i = 0
-        self.map = mmap.mmap(self.file.fileno(), self.mmapSize)
+        self.map = mmap.mmap(self.file.fileno(), self.mmapSize, access=mmap.ACCESS_WRITE)
         while i < len(string):
             while not self.mapIsFull():
+                self.map.write(i)
                 i += 1
                 if i == len(string):
                     break
-            for j in self.map:
-                self.map.write(j)
             self.cleanMap()
-        self.map.write("\n")
+            self.map = mmap.mmap(self.file.fileno(), self.mmapSize, access=mmap.ACCESS_WRITE)
+        self.file.write("\n")
 
     def mapIsFull(self):
         """
         Checks if the buffer is full
         @return: True if the buffer is full and False if not
         """
-        return self.map.size() == self.mmapSize
+        return self.map.tell() == self.mmapSize
     
     def cleanMap(self):
         """
         Empty the buffer
         """
         self.map.flush()
+    
+    def mapNextPortion(self):
+        """
+        Empty the buffer
+        """
+        self.map = mmap.mmap(self.file.fileno(), mmap.PAGESIZE, offset=self.map.tell()*mmap.PAGESIZE, access=mmap.ACCESS_READ)

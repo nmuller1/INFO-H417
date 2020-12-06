@@ -5,13 +5,18 @@ from streamMapping import StreamMapping
 import os
 import random
 
-def length(filename):
+def length(f):
     """
     Sequential reading
-    @param filename: csv file to read
+    @param f: csv file to read
     @return: sum of the length of each line
     """
-    pass
+    stream = StreamBuffer(f, 3)
+    stream.open()
+    sum = 0
+    while not stream.end_of_stream():
+        sum += len(stream.readln())
+    return sum
 
 def randomjump(f,j):
     stream = StreamBuffer(f, 3)
@@ -30,7 +35,7 @@ def testReadStream(stream):
     stream.open()
     stream.seek(0)
     while not stream.end_of_stream():
-        stream.readln()
+        print(stream.readln())
     stream.close()
 
 
@@ -42,7 +47,7 @@ def testWriteStream(stream):
 
 if __name__ == "__main__":
     readFilename = "test.txt"
-    readStream = StreamBuffer(readFilename, 1)
+    readStream = StreamBuffer(readFilename, 7)
     #testReadStream(readStream)
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
@@ -52,5 +57,5 @@ if __name__ == "__main__":
     writeFilename = "scratch.txt"
     writeStream = StreamBuffer(writeFilename,3)
     #testWriteStream(writeStream)
-
-    randomjump(readFilename, 3)
+    print(length(readFilename))
+    #randomjump(readFilename, 3)
