@@ -11,7 +11,8 @@ class StreamLine:
         """
         Read the next line from the stream
         """
-        pass
+        line = "test"
+        return line
 
     def writeln(self, string):
         """
