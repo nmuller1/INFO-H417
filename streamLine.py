@@ -2,7 +2,10 @@ from stream import Stream
 
 
 class StreamLine:
-    """ Implement readln and writeln by using the fgets and fputs functions from the C stdio library. These functions implements a buffering mechanism. """
+    """
+    Implement readln and writeln by using the fgets and fputs functions from the C stdio library.
+    These functions implements a buffering mechanism.
+    """
 
     def __init__(self, filename):
         Stream.__init__(self, filename)
