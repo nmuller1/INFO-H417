@@ -1,0 +1,4 @@
+Ceci est
+un test
+pour le cours
+d'INFO-H417

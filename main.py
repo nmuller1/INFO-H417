@@ -35,11 +35,11 @@ def testReadStream(stream):
     stream.open()
     stream.seek(0)
     while not stream.end_of_stream():
-        print(stream.readln())
+        stream.readln()
     stream.close()
 
 
-def testWriteStream(stream):
+def testWriteStream(writeStream):
     writeStream.create()
     for line in text:
         writeStream.writeln(line)
@@ -47,15 +47,15 @@ def testWriteStream(stream):
 
 if __name__ == "__main__":
     readFilename = "test.txt"
-    readStream = StreamBuffer(readFilename, 7)
-    #testReadStream(readStream)
+    readStream = StreamMapping(readFilename, 1)
+    testReadStream(readStream)
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
     if os.path.exists("scratch.txt"):
         os.remove("scratch.txt")
     writeFilename = "scratch.txt"
-    writeStream = StreamBuffer(writeFilename,3)
-    #testWriteStream(writeStream)
+    writeStream = StreamMapping(writeFilename, 1)
+    testWriteStream(writeStream)
     print(length(readFilename))
-    #randomjump(readFilename, 3)
+    randomjump(readFilename, 3)

@@ -1,4 +1,5 @@
 import mmap
+import os, sys  
 from stream import Stream
 
 class StreamMapping(Stream):
@@ -9,10 +10,39 @@ class StreamMapping(Stream):
 
     def __init__(self, filename, mmapSize):
         Stream.__init__(self, filename)
-        self.mmapSize = mmapSize
-        self.open()
-        self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, access=mmap.ACCESS_READ)
+        self.mmapSize = mmapSize * mmap.ALLOCATIONGRANULARITY
+        self.count = 0
         
+    def open(self):
+        """
+        Open an existing file for reading
+        """
+        self.file = open(self.filename, 'rb')
+        self.size = os.stat(self.filename).st_size
+        self.modulosize = self.size % self.mmapSize
+        if self.size < self.mmapSize:
+            self.mmapSize = self.size
+        self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, offset=0, access=mmap.ACCESS_READ)
+
+    def create(self):
+        """
+        Open an existing file for reading
+        """
+        self.file = open(self.filename, 'wb')
+        self.map = mmap.mmap(-1, length=self.mmapSize, access=mmap.ACCESS_WRITE)
+    
+    def close(self):
+        """
+        Close the stream
+        """
+        self.file.close()
+
+    def seek(self, pos):
+        """
+        Move the file cursor to pos so that a subsequent readln reads from position pos to the next end of line
+        @param pos: position in the file where we want to move the cursor
+        """
+        self.file.seek(pos, 0)
 
     def readln(self):
         """
@@ -20,16 +50,18 @@ class StreamMapping(Stream):
         """
         char = " ".encode("utf-8")
         line = ""
-        while char and char.decode("utf-8") != "\n":
+        while not self.endOfFile() and char.decode("utf-8") != "\n":
             while not self.mapIsFull():
                 char = self.map.read(1)
-                if not char:
+                if self.endOfFile():
                     self.eof = True
                     break
                 if char.decode("utf-8") == "\n":
                     break
                 line += str(char.decode("utf-8"))
-            #self.mapNextPortion()
+            if not self.endOfFile() and self.mapIsFull():
+                self.count += 1
+                self.mapNextPortion()
         return line
 
     def writeln(self, string):
@@ -37,18 +69,16 @@ class StreamMapping(Stream):
         Write a string to the stream and terminate this stream with the newline character
         @param string: to write in the stream
         """
-    
         i = 0
-        self.map = mmap.mmap(self.file.fileno(), self.mmapSize, access=mmap.ACCESS_WRITE)
         while i < len(string):
             while not self.mapIsFull():
-                self.map.write(i)
+                self.map[i:i+1] = string[i].encode("utf-8")
                 i += 1
                 if i == len(string):
                     break
+            self.file.write(self.map[0:i])
             self.cleanMap()
-            self.map = mmap.mmap(self.file.fileno(), self.mmapSize, access=mmap.ACCESS_WRITE)
-        self.file.write("\n")
+        self.file.write("\n".encode("utf-8"))
 
     def mapIsFull(self):
         """
@@ -56,6 +86,13 @@ class StreamMapping(Stream):
         @return: True if the buffer is full and False if not
         """
         return self.map.tell() == self.mmapSize
+    
+    def endOfFile(self):
+        """
+        Checks if the buffer is full
+        @return: True if the buffer is full and False if not
+        """
+        return self.map.tell() == self.size
     
     def cleanMap(self):
         """
@@ -67,4 +104,10 @@ class StreamMapping(Stream):
         """
         Empty the buffer
         """
-        self.map = mmap.mmap(self.file.fileno(), mmap.PAGESIZE, offset=self.map.tell()*mmap.PAGESIZE, access=mmap.ACCESS_READ)
+        if self.mmapSize * (self.count+1) >= self.size:
+                offset = self.mmapSize * self.count
+                self.mmapSize = self.modulosize
+                self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, offset=offset, access=mmap.ACCESS_READ)
+                self.eof = True
+        else:
+                self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, offset=self.map.tell(), access=mmap.ACCESS_READ)
