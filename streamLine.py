@@ -11,12 +11,11 @@ class StreamLine:
         """
         Read the next line from the stream
         """
-        line = "test"
-        return line
+        return self.readln()
 
     def writeln(self, string):
         """
         Write a string to the stream and terminate this stream with the newline character
         @param string: to write in the stream
         """
-        pass
+        self.writeln(string + "\n")
