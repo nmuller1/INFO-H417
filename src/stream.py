@@ -13,7 +13,7 @@ class Stream:
         self.file = open(self.filename, "rb")
 
     def seek(self, pos):
-        """
+        """ b
         Move the file cursor to pos so that a subsequent readln reads from position pos to the next end of line
         @param pos: position in the file where we want to move the cursor
         """

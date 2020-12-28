@@ -1,52 +1,14 @@
+import mmap
+
 from src.streamCharacter import StreamCharacter
 from src.streamBuffer import StreamBuffer
 from src.streamLine import StreamLine
 from src.streamMapping import StreamMapping
 from src.modifiableCycle import ModifiableCycle
 import os
+import time
 import random
 
-def length(f):
-    """
-    Sequential reading
-    @param f: csv file to read
-    @return: sum of the length of each line
-    """
-    stream = StreamBuffer(f, 3)
-    stream.open()
-    sum = 0
-    while not stream.end_of_stream():
-        sum += len(stream.readln())
-    return sum
-
-def randomjump(f,j):
-    stream = StreamBuffer(f, 3)
-    stream.open()
-    sum = 0
-    length = len(stream.file.read())
-    for i in range(j):
-        p = random.randint(0, length)
-        stream.seek(p)
-        line =stream.readln()
-        sum += len(line)
-    print(sum)
-    return(sum)
-
-def testReadStream(stream):
-    stream.open()
-    stream.seek(0)
-    while not stream.end_of_stream():
-        stream.readln()
-    stream.close()
-
-
-def testWriteStream(writeStream):
-    writeStream.create()
-    for line in text:
-        writeStream.writeln(line)
-    writeStream.close()
-    
-    
 def rrmerge(numberStreamR,numberStreamW,filenameW,*files):
     templist = []
     if numberStreamR == 0 :
@@ -111,11 +73,44 @@ def rrmerge(numberStreamR,numberStreamW,filenameW,*files):
             listfiles.delete_prev()
             f.close()
 
-if __name__ == "__main__":
-    readFilename = "test.txt"
-    readStream = StreamMapping(readFilename, 1)
-    testReadStream(readStream)
 
+def testReadStream(stream):
+    """
+    Test the read method of a stream
+    @param stream:
+    @return:
+    """
+    stream.open()
+    stream.seek(0)
+    while not stream.end_of_stream():
+        print(stream.readln())
+    stream.close()
+
+
+def testWriteStream(writeStream):
+    writeStream.create()
+    for line in text:
+        writeStream.writeln(line)
+    writeStream.close()
+
+if __name__ == "__main__":
+    files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
+           "imdb/cast_info.csv"]
+    B = 1 * mmap.ALLOCATIONGRANULARITY
+    readFilename = "imdb/movie_link.csv"
+    readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
+                   StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
+    #for i in range(4):
+        #print(readStreams[i].length())
+
+    readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
+                   StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
+
+    for i in range(4):
+        print(readStreams[i].randomjump(1))
+
+
+"""
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
     if os.path.exists("../testFiles/scratch.txt"):
@@ -126,3 +121,4 @@ if __name__ == "__main__":
     print(length(readFilename))
     randomjump(readFilename, 3)
     rrmerge(1,1,"test1.txt","foo.txt","be.txt","scratch.txt")
+"""

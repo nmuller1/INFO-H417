@@ -1,5 +1,6 @@
 from src.stream import Stream
-
+import time
+import random
 
 class StreamLine(Stream):
     """
@@ -14,7 +15,10 @@ class StreamLine(Stream):
         """
         Read the next line from the stream
         """
-        return self.readln().decode("utf-8")
+        line = self.file.readline().decode("latin-1")
+        if line == "":
+            self.eof = True
+        return line.strip("\n")
 
     def writeln(self, string):
         """
@@ -22,4 +26,31 @@ class StreamLine(Stream):
         @param string: to write in the stream
         """
         res = string + "\n"
-        self.writeln(res.encode("utf-8"))
+        self.file.writeline(res.encode("latin-1"))
+
+    def length(self):
+        """
+        Sequential reading
+        @return: sum of the length of each line
+        """
+        startTime = time.time()
+        self.open()
+        sum = 0
+        while not self.end_of_stream():
+            sum += len(self.readln())
+        finalTime = time.time()
+        print("StreamLine : time =", finalTime-startTime)
+        return sum
+
+    def randomjump(self, j):
+        self.open()
+        sum = 0
+        length = len(self.file.read())
+        for i in range(j):
+            random.seed(1)
+            p = random.randint(0, length)
+            print("p =",p)
+            self.seek(p)
+            line = self.readln()
+            sum += len(line)
+        return sum

@@ -1,4 +1,6 @@
 from src.stream import Stream
+import time
+import random
 
 class StreamBuffer(Stream):
     """
@@ -20,18 +22,19 @@ class StreamBuffer(Stream):
         line = ""
         while not self.eof and not endOfLine:
             #fill the buffer
-            if len(self.buffer == 0):
-                self.buffer = self.file.read(self.bufferSize)
-                if len(self.buffer) < self.bufferSize:
+            if len(self.buffer) == 0:
+                self.buffer = self.file.read(self.bufferSize).decode("latin-1")
+                self.buffer = [char for char in self.buffer]
+                if len(self.buffer) == 0:
                     self.eof = True
             #read the buffer
             for i in range(len(self.buffer)):
-                if self.buffer(0).decode("utf-8") == "\n":
+                if self.buffer[0] == "\n":
                     self.buffer.pop(0)
                     endOfLine = True
                     break
                 else:
-                    line += str(self.buffer.pop(0).decode("utf-8"))
+                    line += self.buffer.pop(0)
         return line
 
     def writeln(self, string):
@@ -42,13 +45,13 @@ class StreamBuffer(Stream):
         i = 0
         while i < len(string):
             while not self.bufferIsFull():
-                self.buffer += string[i].encode("utf-8")
+                self.buffer += string[i].encode("latin-1")
                 i += 1
                 if i == len(string):
                     break
             self.file.write(self.buffer)
             self.buffer = ""
-        self.file.write("\n".encode("utf-8"))
+        self.file.write("\n".encode("latin-1"))
 
     def bufferIsFull(self):
         """
@@ -56,3 +59,30 @@ class StreamBuffer(Stream):
         @return: True if the buffer is full and False if not
         """
         return len(self.buffer) == self.bufferSize
+
+    def length(self):
+        """
+        Sequential reading
+        @return: sum of the length of each line
+        """
+        startTime = time.time()
+        self.open()
+        sum = 0
+        while not self.end_of_stream():
+            sum += len(self.readln())
+        finalTime = time.time()
+        print("StreamBuffer : time =", finalTime-startTime)
+        return sum
+
+    def randomjump(self, j):
+        self.open()
+        sum = 0
+        length = len(self.file.read())
+        for i in range(j):
+            random.seed(1)
+            p = random.randint(0, length)
+            print("p =",p)
+            self.seek(p)
+            line = self.readln()
+            sum += len(line)
+        return sum
