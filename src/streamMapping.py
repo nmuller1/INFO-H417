@@ -14,6 +14,7 @@ class StreamMapping(Stream):
         Stream.__init__(self, filename)
         self.endofmap = False
         self.mmapSize = mmapSize
+        self.mapLength = self.mmapSize #size of the current map
         self.count = 0
         
     def open(self):
@@ -25,7 +26,7 @@ class StreamMapping(Stream):
         self.modulosize = self.size % self.mmapSize
         if self.size < self.mmapSize:
             self.mmapSize = self.size
-        self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize, offset=0, access=mmap.ACCESS_READ)
+        self.map = mmap.mmap(self.file.fileno(), length=self.mapLength, offset=0, access=mmap.ACCESS_READ)
 
     def seek(self, pos):
         """
@@ -34,10 +35,8 @@ class StreamMapping(Stream):
         """
         self.file.seek(pos)
         self.count = pos//self.mmapSize
-
         seek = pos % self.mmapSize
-        self.cleanMap()
-        self.map = mmap.mmap(self.file.fileno(), length=self.mmapSize*self.count, offset=0, access=mmap.ACCESS_READ)
+        self.mapNextPortion()
         self.map.read(seek)
 
     def create(self):
@@ -45,7 +44,7 @@ class StreamMapping(Stream):
         Open an existing file for reading
         """
         self.file = open(self.filename, 'wb')
-        self.map = mmap.mmap(-1, length=self.mmapSize, access=mmap.ACCESS_WRITE)
+        self.map = mmap.mmap(-1, length=self.mapLength, access=mmap.ACCESS_WRITE)
     
     def close(self):
         """
@@ -93,7 +92,7 @@ class StreamMapping(Stream):
         Checks if the buffer is full
         @return: True if the buffer is full and False if not
         """
-        return self.map.tell() == self.mmapSize
+        return self.map.tell() == self.mapLength
 
     def cleanMap(self):
         """
@@ -105,13 +104,12 @@ class StreamMapping(Stream):
         """
         Empty the buffer
         """
-        offset = self.mmapSize * self.count +1
-        length = self.mmapSize
+        offset = self.mmapSize * self.count
         if self.mmapSize * (self.count+1) >= self.size:
-            length = self.modulosize
+            self.mapLength = self.modulosize
             self.endofmap = True
         self.cleanMap()
-        self.map = mmap.mmap(self.file.fileno(), length=length, offset=offset, access=mmap.ACCESS_READ)
+        self.map = mmap.mmap(self.file.fileno(), length=self.mapLength, offset=offset, access=mmap.ACCESS_READ)
 
     def length(self):
         """

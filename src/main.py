@@ -100,6 +100,7 @@ if __name__ == "__main__":
     readFilename = "imdb/movie_link.csv"
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
+
     #for i in range(4):
         #print(readStreams[i].length())
 
