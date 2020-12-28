@@ -118,8 +118,8 @@ if __name__ == "__main__":
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
-    if os.path.exists("../scratch.txt"):
-        os.remove("../scratch.txt")
+    if os.path.exists("../testFiles/scratch.txt"):
+        os.remove("../testFiles/scratch.txt")
     writeFilename = "scratch.txt"
     writeStream = StreamMapping(writeFilename, 1)
     testWriteStream(writeStream)
