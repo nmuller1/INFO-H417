@@ -14,7 +14,7 @@ class StreamCharacter(Stream):
         """
         Open an existing file for reading
         """
-        self.file = open(self.filename, "r")
+        self.file = open(self.filename, "rb", buffering=0)
 
     def readln(self):
         """
@@ -24,7 +24,7 @@ class StreamCharacter(Stream):
         char = " "
         line = ""
         while char != "\n":
-            char = self.file.read(1)
+            char = self.file.read(1).decode("utf-8")
             if not char:
                 self.eof = True
                 break
@@ -37,5 +37,5 @@ class StreamCharacter(Stream):
         @param string: to write in the stream
         """
         for char in string:
-            self.file.write(char)
-        self.file.write("\n")
+            self.file.write(char.encode("utf-8"))
+        self.file.write("\n".encode("utf-8"))

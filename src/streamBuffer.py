@@ -1,6 +1,5 @@
 from src.stream import Stream
 
-
 class StreamBuffer(Stream):
     """
     Streams are equiped with a buffer of size B in internal memory.

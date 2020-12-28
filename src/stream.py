@@ -2,7 +2,6 @@ class Stream:
     """
     Implements the common methods of the streams
     """
-
     def __init__(self, filename):
         self.filename = filename
         self.eof = False
@@ -11,7 +10,7 @@ class Stream:
         """
         Open an existing file for reading
         """
-        self.file = open(self.filename, "r")
+        self.file = open(self.filename, "rb")
 
     def seek(self, pos):
         """
@@ -31,7 +30,7 @@ class Stream:
         """
         Create a new file
         """
-        self.file = open(self.filename, "x")
+        self.file = open(self.filename, "xb")
 
     def close(self):
         """
