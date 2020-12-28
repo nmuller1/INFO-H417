@@ -17,14 +17,22 @@ class StreamBuffer(Stream):
         Read the next line from the stream
         @return: read line
         """
-        char = " "
+        endOfLine = False
         line = ""
-        while char != "\n":
-            self.buffer = self.file.read(self.bufferSize)
-            if len(self.buffer) < self.bufferSize: #end of file
-                self.eof = True
-                break
-            line += self.buffer
+        while not self.eof and not endOfLine:
+            #fill the buffer
+            if len(self.buffer == 0):
+                self.buffer = self.file.read(self.bufferSize)
+                if len(self.buffer) < self.bufferSize:
+                    self.eof = True
+            #read the buffer
+            for i in range(len(self.buffer)):
+                if self.buffer(0).decode("utf-8") == "\n":
+                    self.buffer.pop(0)
+                    endOfLine = True
+                    break
+                else:
+                    line += str(self.buffer.pop(0).decode("utf-8"))
         return line
 
     def writeln(self, string):
@@ -35,13 +43,13 @@ class StreamBuffer(Stream):
         i = 0
         while i < len(string):
             while not self.bufferIsFull():
-                self.buffer += string[i]
+                self.buffer += string[i].encode("utf-8")
                 i += 1
                 if i == len(string):
                     break
             self.file.write(self.buffer)
             self.buffer = ""
-        self.file.write("\n")
+        self.file.write("\n".encode("utf-8"))
 
     def bufferIsFull(self):
         """
