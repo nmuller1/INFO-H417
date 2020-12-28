@@ -1,4 +1,4 @@
-hello word we are trying
-please
-help 
-yeaaah
+Ceci est
+un test
+pour le cours
+d'INFO-H417

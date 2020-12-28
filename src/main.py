@@ -1,8 +1,8 @@
-from streamCharacter import StreamCharacter
-from streamBuffer import StreamBuffer
-from streamLine import StreamLine
-from streamMapping import StreamMapping
-from modifiableCycle import ModifiableCycle
+from src.streamCharacter import StreamCharacter
+from src.streamBuffer import StreamBuffer
+from src.streamLine import StreamLine
+from src.streamMapping import StreamMapping
+from src.modifiableCycle import ModifiableCycle
 import os
 import random
 
@@ -118,8 +118,8 @@ if __name__ == "__main__":
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
 
-    if os.path.exists("scratch.txt"):
-        os.remove("scratch.txt")
+    if os.path.exists("../scratch.txt"):
+        os.remove("../scratch.txt")
     writeFilename = "scratch.txt"
     writeStream = StreamMapping(writeFilename, 1)
     testWriteStream(writeStream)

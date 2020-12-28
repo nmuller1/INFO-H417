@@ -1,6 +1,6 @@
 import mmap
-import os, sys  
-from stream import Stream
+import os
+from src.stream import Stream
 
 class StreamMapping(Stream):
     """

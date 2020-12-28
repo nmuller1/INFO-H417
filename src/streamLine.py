@@ -1,4 +1,4 @@
-from stream import Stream
+from src.stream import Stream
 
 
 class StreamLine:
