@@ -1,4 +1,4 @@
-from src.stream import Stream
+from stream import Stream
 import time
 import random
 
@@ -26,7 +26,7 @@ class StreamLine(Stream):
         @param string: to write in the stream
         """
         res = string + "\n"
-        self.file.writeline(res.encode("latin-1"))
+        self.file.write(res.encode("latin-1"))
 
     def length(self):
         """
