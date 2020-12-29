@@ -101,8 +101,8 @@ if __name__ == "__main__":
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
 
-    #for i in range(4):
-        #print(readStreams[i].length())
+    for i in range(4):
+        print(readStreams[i].length())
 
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
