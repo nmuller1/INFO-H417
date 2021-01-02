@@ -1,6 +1,6 @@
 import mmap
 import os
-from src.stream import Stream
+from stream import Stream
 import time
 import random
 
