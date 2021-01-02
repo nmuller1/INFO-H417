@@ -1,6 +1,6 @@
 import mmap
 import os
-from src.stream import Stream
+from stream import Stream
 import time
 import random
 
@@ -25,7 +25,8 @@ class StreamMapping(Stream):
         self.size = os.stat(self.filename).st_size
         self.modulosize = self.size % self.mmapSize
         if self.size < self.mmapSize:
-            self.mmapSize = self.size
+            self.mapLength = self.size
+            self.endofmap = True
         self.map = mmap.mmap(self.file.fileno(), length=self.mapLength, offset=0, access=mmap.ACCESS_READ)
 
     def seek(self, pos):

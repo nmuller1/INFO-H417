@@ -1,10 +1,10 @@
 import mmap
 
-from src.streamCharacter import StreamCharacter
-from src.streamBuffer import StreamBuffer
-from src.streamLine import StreamLine
-from src.streamMapping import StreamMapping
-from src.modifiableCycle import ModifiableCycle
+from streamCharacter import StreamCharacter
+from streamBuffer import StreamBuffer
+from streamLine import StreamLine
+from streamMapping import StreamMapping
+from modifiableCycle import ModifiableCycle
 import os
 import time
 import random
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
            "imdb/cast_info.csv"]
     B = 1 * mmap.ALLOCATIONGRANULARITY
-    readFilename = "imdb/movie_link.csv"
+    readFilename = "../testFiles/link_type.csv"
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
 
