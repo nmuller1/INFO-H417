@@ -6,6 +6,7 @@ from streamMapping import StreamMapping
 
 import os,queue
 import mmap
+import time
 
 class ExtSort():
     def __init__(self,k,M,d,inputFile,numberStreamR,numberStreamW):
@@ -98,6 +99,7 @@ class ExtSort():
         return records
         
     def extsort (self):
+        startTime = time.time()
         #check if k and M and d are positive (self.column_k = k-1 )
         if self.column_k <0 or self.bufferSize<=0 or self.numberInputStreams_d  <=0 :
             return "Error : k,d and M must be positive numbers"
@@ -178,7 +180,10 @@ class ExtSort():
             if len(Opened_files) == 1:
                 #print the file path of the final file that contains the sorted input file
                 Opened_files[0].close()
-                return filesPath[0]
+                finalTime = time.time()
+                timeTotal = finalTime - startTime
+                print("StreamLine : time =", timeTotal)
+                return filesPath[0],timeTotal
             
             
             

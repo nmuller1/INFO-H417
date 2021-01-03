@@ -201,11 +201,11 @@ if __name__ == "__main__":
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
     "../imdb/role_type.csv","../imdb/movie_link.csv","../imdb/aka_title.csv"
-    """
+    
     moy=0
     counter=0
     for i in range(10):
-        readStream = rrmerge(4096,2,0,"../testFiles/test"+str(counter)+".csv","../imdb/role_type.csv")
+        readStream = rrmerge(4096,2,2,"../testFiles/test"+str(counter)+".csv","../imdb/role_type.csv","../imdb/movie_link.csv","../imdb/aka_title.csv")
         counter+=1
         moy += readStream
     moy /= 10
@@ -218,7 +218,7 @@ if __name__ == "__main__":
 
     #rrmerge(3,3,"../testFiles/test3.txt","../testFiles/foo.txt","../testFiles/be.txt")
 
-
+"""
     
     
     """
@@ -238,6 +238,7 @@ if __name__ == "__main__":
     for file in files:
            print("total en moyenne pour le fichier", file, " avec B =", B, ":", random4(file, B,100))
     """
+    moy=0
     k = 1
 
     M = 16384
@@ -245,11 +246,58 @@ if __name__ == "__main__":
     numberStreamR = 2
     numberStreamW = 1
 
-    inputFile = "../imdb/cast_info.csv"
-    temp = ExtSort(k, M, d, inputFile, numberStreamR, numberStreamW)
-    os.remove(temp)
-    print(temp.extsort())
+    inputFile = "../imdb/role_type.csv"
+    for i in range(10):
+        temp = ExtSort(k, M, d, inputFile, numberStreamR, numberStreamW)
     
-    """
+        temp1,time1= temp.extsort()
+        os.remove(temp1)
+
+        moy += time1
+    moy /= 10
+    
+    print( moy)
+    moy=0
+    k = 1
+
+    M = 16384
+    d = 10
+    numberStreamR = 2
+    numberStreamW = 1
+
+    inputFile = "../imdb/movie_link.csv"
+    for i in range(10):
+        temp = ExtSort(k, M, d, inputFile, numberStreamR, numberStreamW)
+    
+        temp1,time1= temp.extsort()
+        os.remove(temp1)
+
+        moy += time1
+    moy /= 10
+    
+    print( moy)
+    
+    moy=0
+    k = 1
+
+    M = 16384
+    d = 10
+    numberStreamR = 2
+    numberStreamW = 1
+
+    inputFile = "../imdb/aka_title.csv"
+    for i in range(10):
+        temp = ExtSort(k, M, d, inputFile, numberStreamR, numberStreamW)
+    
+        temp1,time1= temp.extsort()
+        os.remove(temp1)
+
+        moy += time1
+    moy /= 10
+    
+    print( moy)
+    
+    
+
 
 
