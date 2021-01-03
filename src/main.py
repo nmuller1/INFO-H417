@@ -198,10 +198,10 @@ if __name__ == "__main__":
 
     for i in range(4):
         print(readStreams[i].randomjump(1))
-
-
+    """
 """
-    text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
+
+
 
     if os.path.exists("../testFiles/scratch.txt"):
         os.remove("../testFiles/scratch.txt")
