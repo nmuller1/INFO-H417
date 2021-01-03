@@ -87,6 +87,11 @@ def rrmerge(numberStreamR,numberStreamW,filenameW,*files):
             output_stream.writeln(line)
     #close the output file
     output_stream.close()
+
+
+
+
+
 def testReadStream(stream):
     """
     Test the read method of a stream
@@ -99,15 +104,16 @@ def testReadStream(stream):
         print(stream.readln())
     stream.close()
 
-
 def testWriteStream(writeStream):
+    text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
     writeStream.create()
     for line in text:
         writeStream.writeln(line)
     writeStream.close()
+
     
 if __name__ == "__main__":
-    """files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
+    files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
            "imdb/cast_info.csv"]
     B = 1 * mmap.ALLOCATIONGRANULARITY
     readFilename = "../testFiles/link_type.csv"
@@ -117,37 +123,112 @@ if __name__ == "__main__":
     for i in range(4):
         print(readStreams[i].length())
 
-    readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
-                   StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
+    def length1(f):
+        sum = 0
+        for i in range(10):
+            readStream = StreamCharacter(f)
+            sum += readStream.length()[1]
+        sum /= 10
+        return sum
 
-    for i in range(4):
-        print(readStreams[i].randomjump(1))"""
+    def length2(f):
+        sum = 0
+        for i in range(10):
+            readStream = StreamLine(f)
+            sum += readStream.length()[1]
+        sum /= 10
+        return sum
 
-    
+    def length3(f,B):
+        sum = 0
+        for i in range(10):
+            readStream = StreamBuffer(f,B)
+            sum += readStream.length()[1]
+        sum /= 10
+        return sum
+
+    def length4(f,B):
+        sum = 0
+        for i in range(10):
+            readStream = StreamMapping(f, B)
+            sum += readStream.length()[1]
+        sum /= 10
+        return sum
+
+    def random1(f):
+        sum = 0
+        for i in range(10):
+            readStream = StreamCharacter(f)
+            sum += readStream.randomjump(200)[1]
+        sum /= 10
+        return sum
+
+    def random2(f):
+        sum = 0
+        for i in range(10):
+            readStream = StreamLine(f)
+            sum += readStream.randomjump(200)[1]
+        sum /= 10
+        return sum
+
+    def random3(f,B):
+        sum = 0
+        for i in range(10):
+            readStream = StreamBuffer(f,B)
+            sum += readStream.randomjump(200)[1]
+        sum /= 10
+        return sum
+
+    def random3(f,B):
+        sum = 0
+        for i in range(10):
+            readStream = StreamBuffer(f, B)
+            sum += readStream.randomjump(10)[1]
+        sum /= 10
+        return sum
+
+    def random4(f,B,j):
+        sum = 0
+        for i in range(10):
+            readStream = StreamMapping(f, B)
+            sum += readStream.randomjump(j)[1]
+        sum /= 10
+        return sum
 
     text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
-    """
-    if os.path.exists("../testFiles/scratch.txt"):
-        os.remove("../testFiles/scratch.txt")
-    writeFilename = "scratch.txt"
-    writeStream = StreamMapping(writeFilename, 1)
-    testWriteStream(writeStream)
-    print(length(readFilename))
-    randomjump(readFilename, 3)
-    """
-    #rrmerge(1,1,"../testFiles/test3.txt","../testFiles/foo.txt","../testFiles/be.txt")
-
-    k=1
-
-    M=50
-    d=3
-    numberStreamR=2
-    numberStreamW=2
-    b=3
-    inputFile = "../testFiles/link_type.csv"
-    temp =ExtSort(k,M,d,inputFile,numberStreamR,numberStreamW,b)
     
+
+    rrmerge(1,1,"../testFiles/test3.txt","../testFiles/foo.txt","../testFiles/be.txt")
+
+
+    
+    
+
+    B = 1 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =", B, ":", random4(file, B,100))
+
+    B = 2 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =", B, ":", random4(file, B,100))
+
+    B = 3 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =", B, ":", random4(file, B,100))
+
+    B = 4 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =", B, ":", random4(file, B,100))
+
+    k = 1
+
+    M = 50
+    d = 3
+    numberStreamR = 2
+    numberStreamW = 2
+    b = 3
+    inputFile = "../testFiles/link_type.csv"
+    temp = ExtSort(k, M, d, inputFile, numberStreamR, numberStreamW, b)
+
     print(temp.extsort())
 
-    
-    

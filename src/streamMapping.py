@@ -1,6 +1,6 @@
 import mmap
 import os
-from src.stream import Stream
+from stream import Stream
 import time
 import random
 
@@ -16,6 +16,7 @@ class StreamMapping(Stream):
         self.mmapSize = mmapSize
         self.mapLength = self.mmapSize #size of the current map
         self.count = 0
+        self.tempLine = ""
         
     def open(self):
         """
@@ -23,9 +24,9 @@ class StreamMapping(Stream):
         """
         self.file = open(self.filename, 'rb')
         self.size = os.stat(self.filename).st_size
-        self.modulosize = self.size % self.mmapSize
         if self.size < self.mmapSize:
-            self.mmapSize = self.size
+            self.mapLength = self.size
+            self.endofmap = True
         self.map = mmap.mmap(self.file.fileno(), length=self.mapLength, offset=0, access=mmap.ACCESS_READ)
 
     def seek(self, pos):
@@ -33,6 +34,7 @@ class StreamMapping(Stream):
         Move the file cursor to pos so that a subsequent readln reads from position pos to the next end of line
         @param pos: position in the file where we want to move the cursor
         """
+        self.endofmap = False
         self.file.seek(pos)
         self.count = pos//self.mmapSize
         seek = pos % self.mmapSize
@@ -53,6 +55,22 @@ class StreamMapping(Stream):
         self.file.close()
 
     def readln(self):
+        """
+        Read the next line from the stream
+        """
+        line = self.map.readline()
+        if not line or line[-1] != 10:
+            self.tempLine = line
+            self.count += 1
+            if not self.endofmap:
+                self.mapNextPortion()
+                line = self.tempLine + self.map.readline()
+            else:
+                self.eof = True
+            self.tempLine = ""
+        return line.decode("latin-1").strip("\n")
+
+    def readlnBeta(self):
         """
         Read the next line from the stream
         """
@@ -106,7 +124,7 @@ class StreamMapping(Stream):
         """
         offset = self.mmapSize * self.count
         if self.mmapSize * (self.count+1) >= self.size:
-            self.mapLength = self.modulosize
+            self.mapLength = self.size % self.mmapSize
             self.endofmap = True
         self.cleanMap()
         self.map = mmap.mmap(self.file.fileno(), length=self.mapLength, offset=offset, access=mmap.ACCESS_READ)
@@ -122,10 +140,12 @@ class StreamMapping(Stream):
         while not self.end_of_stream():
             sum += len(self.readln())
         finalTime = time.time()
-        print("StreamMapping: time = ", finalTime-startTime)
-        return sum
+        timeTotal = finalTime - startTime
+        print("StreamMapping: time = ", timeTotal)
+        return sum, timeTotal
 
     def randomjump(self, j):
+        startTime = time.time()
         self.open()
         sum = 0
         length = len(self.file.read())
@@ -136,4 +156,8 @@ class StreamMapping(Stream):
             self.seek(p)
             line = self.readln()
             sum += len(line)
-        return sum
+        finalTime = time.time()
+        timeTotal = finalTime - startTime
+        print("StreamMapping: time = ", timeTotal)
+        self.close()
+        return sum, timeTotal

@@ -1,3 +1,4 @@
+
 from streamCharacter import StreamCharacter
 from streamBuffer import StreamBuffer
 from streamLine import StreamLine
@@ -7,7 +8,7 @@ import os,queue
 import mmap
 
 class ExtSort():
-    def __init__(self,k,M,d,inputFile,numberStreamR,numberStreamW,b):
+    def __init__(self,k,M,d,inputFile,numberStreamR,numberStreamW):
 
         #M is the buffersize
         self.bufferSize = M
@@ -218,8 +219,5 @@ class ExtSort():
             
             
             
-            
-        
-            
-         
+ 
          

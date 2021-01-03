@@ -1,4 +1,4 @@
-from src.stream import Stream
+from stream import Stream
 import time
 import random
 
@@ -13,45 +13,31 @@ class StreamBuffer(Stream):
         self.bufferSize = bufferSize
         self.buffer = ""
 
+    def open(self):
+        """
+        Open an existing file for reading
+        """
+        self.file = open(self.filename, "rb", buffering=self.bufferSize)
+
     def readln(self):
         """
         Read the next line from the stream
         @return: read line
         """
-        endOfLine = False
-        line = ""
-        while not self.eof and not endOfLine:
-            #fill the buffer
-            if len(self.buffer) == 0:
-                self.buffer = self.file.read(self.bufferSize).decode("latin-1")
-                self.buffer = [char for char in self.buffer]
-                if len(self.buffer) == 0:
-                    self.eof = True
-            #read the buffer
-            for i in range(len(self.buffer)):
-                if self.buffer[0] == "\n":
-                    self.buffer.pop(0)
-                    endOfLine = True
-                    break
-                else:
-                    line += self.buffer.pop(0)
-        return line
+        line = self.file.readline().decode("latin-1")
+        if line == "":
+            self.eof = True
+        return line.strip("\n")
+
+    def create(self):
+        """
+        Create a new file
+        """
+        self.file = open(self.filename, "xb", buffering=self.bufferSize)
 
     def writeln(self, string):
-        """
-        Write a string to the stream and terminate this stream with the newline character
-        @param string: to write in the stream
-        """
-        i = 0
-        while i < len(string):
-            while not self.bufferIsFull():
-                self.buffer += string[i].encode("latin-1")
-                i += 1
-                if i == len(string):
-                    break
-            self.file.write(self.buffer)
-            self.buffer = ""
-        self.file.write("\n".encode("latin-1"))
+        res = string + "\n"
+        self.file.write(res.encode("latin-1"))
 
     def bufferIsFull(self):
         """
@@ -71,18 +57,21 @@ class StreamBuffer(Stream):
         while not self.end_of_stream():
             sum += len(self.readln())
         finalTime = time.time()
-        print("StreamBuffer : time =", finalTime-startTime)
-        return sum
+        timeTotal = finalTime - startTime
+        print("StreamBuffer : time =", timeTotal)
+        return sum, timeTotal
 
     def randomjump(self, j):
+        startTime = time.time()
         self.open()
         sum = 0
         length = len(self.file.read())
         for i in range(j):
-            random.seed(1)
             p = random.randint(0, length)
-            print("p =",p)
             self.seek(p)
             line = self.readln()
             sum += len(line)
-        return sum
+        finalTime = time.time()
+        timeTotal = finalTime - startTime
+        print("StreamBuffer : time =", timeTotal)
+        return sum, timeTotal

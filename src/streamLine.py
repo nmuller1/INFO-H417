@@ -39,18 +39,21 @@ class StreamLine(Stream):
         while not self.end_of_stream():
             sum += len(self.readln())
         finalTime = time.time()
-        print("StreamLine : time =", finalTime-startTime)
-        return sum
+        timeTotal = finalTime - startTime
+        print("StreamLine : time =", timeTotal)
+        return sum, timeTotal
 
     def randomjump(self, j):
+        startTime = time.time()
         self.open()
         sum = 0
         length = len(self.file.read())
         for i in range(j):
-            random.seed(1)
             p = random.randint(0, length)
-            print("p =",p)
             self.seek(p)
             line = self.readln()
             sum += len(line)
-        return sum
+        finalTime = time.time()
+        timeTotal = finalTime - startTime
+        print("StreamLine : time =", timeTotal)
+        return sum, timeTotal
