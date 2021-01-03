@@ -93,6 +93,62 @@ def testWriteStream(writeStream):
         writeStream.writeln(line)
     writeStream.close()
 
+def length1(f):
+    sum = 0
+    for i in range(10):
+        readStream = StreamCharacter(f)
+        sum += readStream.length()[1]
+    sum /= 10
+    return sum
+
+def length2(f):
+    sum = 0
+    for i in range(10):
+        readStream = StreamLine(f)
+        sum += readStream.length()[1]
+    sum /= 10
+    return sum
+
+def length3(f,B):
+    sum = 0
+    for i in range(10):
+        readStream = StreamBuffer(f,B)
+        sum += readStream.length()[1]
+    sum /= 10
+    return sum
+
+def length4(f,B):
+    sum = 0
+    for i in range(10):
+        readStream = StreamMapping(f,B)
+        sum += readStream.length()[1]
+    sum /= 10
+    return sum
+
+def random1(f):
+    sum = 0
+    for i in range(10):
+        readStream = StreamCharacter(f)
+        sum += readStream.randomjump(200)[1]
+    sum /= 10
+    return sum
+
+def random2(f):
+    sum = 0
+    for i in range(10):
+        readStream = StreamLine(f)
+        sum += readStream.randomjump(200)[1]
+    sum /= 10
+    return sum
+
+def random3(f,B):
+    sum = 0
+    for i in range(10):
+        readStream = StreamBuffer(f,B)
+        sum += readStream.randomjump(200)[1]
+    sum /= 10
+    return sum
+
 if __name__ == "__main__":
     files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
            "imdb/cast_info.csv"]
