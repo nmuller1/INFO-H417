@@ -123,10 +123,12 @@ class StreamMapping(Stream):
         while not self.end_of_stream():
             sum += len(self.readln())
         finalTime = time.time()
-        print("StreamMapping: time = ", finalTime-startTime)
-        return sum
+        timeTotal = finalTime - startTime
+        print("StreamMapping: time = ", timeTotal)
+        return sum, timeTotal
 
     def randomjump(self, j):
+        startTime = time.time()
         self.open()
         sum = 0
         length = len(self.file.read())
@@ -137,4 +139,8 @@ class StreamMapping(Stream):
             self.seek(p)
             line = self.readln()
             sum += len(line)
-        return sum
+        finalTime = time.time()
+        timeTotal = finalTime - startTime
+        print("StreamMapping: time = ", timeTotal)
+        self.close()
+        return sum, timeTotal
