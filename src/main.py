@@ -150,16 +150,49 @@ def random3(f,B):
     return sum
 
 if __name__ == "__main__":
-    files = ["imdb/comp_cast_type.csv", "imdb/movie_link.csv", "imdb/aka_title.csv", "imdb/name.csv",
-           "imdb/cast_info.csv"]
-    B = 1 * mmap.ALLOCATIONGRANULARITY
-    readFilename = "../testFiles/link_type.csv"
+    files = ["../imdb/role_type.csv", "../imdb/movie_link.csv", "../imdb/aka_title.csv", "../imdb/name.csv",
+           "../imdb/cast_info.csv"]
+
+    #Implementation 4
+    B = 2 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =",B,":", length4(file, B))
+
+    """
+
+    #Implementation 1
+    for file in files:
+        print("total en moyenne pour le fichier",file,":", random1(file))
+
+    #Implementation 2
+    for file in files:
+        print("total en moyenne pour le fichier", file, ":", random2(file))
+
+    #Implementation 3
+    B = 2 * mmap.ALLOCATIONGRANULARITY
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B =",B,":", random3(file, B))
+
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B = 512:", random3(file, 512))
+
+    for file in files:
+        print("total en moyenne pour le fichier", file, " avec B = 64:", random3(file, 64))
+
+    
+    readFilename = "../imdb/aka_title.csv"
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
 
-    for i in range(4):
-        print(readStreams[i].length())
 
+    """
+
+
+
+
+
+    """
+    
     readStreams = [StreamCharacter(readFilename), StreamLine(readFilename),
                    StreamBuffer(readFilename, B), StreamMapping(readFilename, B)]
 
