@@ -94,7 +94,7 @@ class ExtSort():
             Opened_files[0].close()
             Opened_files.pop(0)
             filesPath.pop(0)
-            #os.remove(filesPath)
+            os.remove(filesPath)
         return records
         
     def extsort (self):
