@@ -86,8 +86,8 @@ def testReadStream(stream):
         print(stream.readln())
     stream.close()
 
-
 def testWriteStream(writeStream):
+    text = ["Ceci est", "un test", "pour le cours", "d'INFO-H417"]
     writeStream.create()
     for line in text:
         writeStream.writeln(line)
